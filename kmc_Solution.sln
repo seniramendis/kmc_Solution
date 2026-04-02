@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.37111.16 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kmc.API", "kmc.API\kmc.API.csproj", "{3160C572-9776-4929-9EFE-9FDB4477A89B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "kmc.Client", "kmc.Client\kmc.Client.csproj", "{1A0B1F7D-DB38-4C56-A596-603C0194618F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{3160C572-9776-4929-9EFE-9FDB4477A89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3160C572-9776-4929-9EFE-9FDB4477A89B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3160C572-9776-4929-9EFE-9FDB4477A89B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A0B1F7D-DB38-4C56-A596-603C0194618F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A0B1F7D-DB38-4C56-A596-603C0194618F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A0B1F7D-DB38-4C56-A596-603C0194618F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A0B1F7D-DB38-4C56-A596-603C0194618F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
