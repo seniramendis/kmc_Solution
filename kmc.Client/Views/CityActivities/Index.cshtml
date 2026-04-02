@@ -1,0 +1,44 @@
+﻿@model IEnumerable<kmc.Client.Models.CityActivityViewModel>
+
+@{
+    ViewData["Title"] = "City Activities";
+}
+
+<div class="container mt-4">
+    <h2>Available City Activities</h2>
+    <hr />
+
+    <table class="table table-striped table-hover mt-3">
+        <thead class="table-dark">
+            <tr>
+                <th>Activity Name</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Venue</th>
+                <th>Max Participants</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.ActivityName</td>
+                        <td><span class="badge bg-primary">@item.Category</span></td>
+                        <td>@item.ScheduledDate.ToString("MMM dd, yyyy h:mm tt")</td>
+                        <td>@item.Venue</td>
+                        <td>@item.MaxParticipants</td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    
+    @if (Model == null || !Model.Any())
+    {
+        <div class="alert alert-warning">
+            No activities found. Is the API running and connected?
+        </div>
+    }
+</div>
