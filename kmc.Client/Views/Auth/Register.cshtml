@@ -11,10 +11,21 @@
                 <div class="card-body p-4">
                     <form asp-action="Register">
                         <div asp-validation-summary="All" class="text-danger mb-3 fw-bold"></div>
+                        
                         <div class="mb-3">
                             <label asp-for="Email" class="form-label fw-bold">Email Address</label>
                             <input asp-for="Email" class="form-control form-control-lg" required />
                         </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Role" class="form-label fw-bold">Account Type</label>
+                            <select asp-for="Role" class="form-select form-select-lg" required>
+                                <option value="">-- Select your Role --</option>
+                                <option value="Resident">City Resident (Can Book Events)</option>
+                                <option value="Organizer">City Organizer (Can Create Events)</option>
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label asp-for="Password" class="form-label fw-bold">Password</label>
                             <input asp-for="Password" class="form-control form-control-lg" required />

@@ -13,6 +13,9 @@ namespace kmc.Client.Models
         [Required, DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Passwords do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required]
+        public string Role { get; set; } // Identifies Organizer vs Resident
     }
 
     public class LoginViewModel

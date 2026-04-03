@@ -13,12 +13,14 @@ namespace kmc.API.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
 
-        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public AuthController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _configuration = configuration;
         }
 
@@ -31,6 +33,13 @@ namespace kmc.API.Controllers
 
             if (result.Succeeded)
             {
+                // Create the Role if it doesn't exist, then assign it to the user
+                if (!await _roleManager.RoleExistsAsync(model.Role))
+                {
+                    await _roleManager.CreateAsync(new IdentityRole(model.Role));
+                }
+                await _userManager.AddToRoleAsync(user, model.Role);
+
                 return Ok(new { Message = "User registered successfully!" });
             }
 
@@ -44,15 +53,21 @@ namespace kmc.API.Controllers
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
-                // Create the Digital Wristband (JWT)
                 var authClaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
-                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.Name, user.UserName!),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+                // Get the user's role and add it to their VIP Wristband (Token)
+                var userRoles = await _userManager.GetRolesAsync(user);
+                foreach (var role in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role, role));
+                }
+
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!));
 
                 var token = new JwtSecurityToken(
                     issuer: _configuration["Jwt:Issuer"],
@@ -73,11 +88,11 @@ namespace kmc.API.Controllers
         }
     }
 
-    // Small helper classes for the data coming from the frontend
     public class RegisterModel
     {
         public string Email { get; set; }
         public string Password { get; set; }
+        public string Role { get; set; }
     }
 
     public class LoginModel

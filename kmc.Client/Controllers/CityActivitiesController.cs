@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.Net.Http.Json;
+using System.Net.Http.Headers;
 
 namespace kmc.Client.Controllers
 {
@@ -16,10 +17,22 @@ namespace kmc.Client.Controllers
             _configuration = configuration;
         }
 
+        // HELPER METHOD: Attaches the VIP Wristband (Token) to API requests
+        private HttpClient CreateAuthenticatedClient()
+        {
+            var client = _httpClientFactory.CreateClient();
+            var token = HttpContext.Request.Cookies["JWToken"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            return client;
+        }
+
         // GET: CityActivities
         public async Task<IActionResult> Index()
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateAuthenticatedClient(); // Uses new helper!
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities");
@@ -43,8 +56,9 @@ namespace kmc.Client.Controllers
         {
             if (ModelState.IsValid)
             {
-                var client = _httpClientFactory.CreateClient();
+                var client = CreateAuthenticatedClient(); // Uses new helper!
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
                 var response = await client.PostAsJsonAsync($"{baseUrl}/api/CityActivities", activity);
                 if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             }
@@ -54,7 +68,7 @@ namespace kmc.Client.Controllers
         // GET: CityActivities/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateAuthenticatedClient(); // Uses new helper!
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
@@ -75,7 +89,7 @@ namespace kmc.Client.Controllers
 
             if (ModelState.IsValid)
             {
-                var client = _httpClientFactory.CreateClient();
+                var client = CreateAuthenticatedClient(); // Uses new helper!
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
                 var response = await client.PutAsJsonAsync($"{baseUrl}/api/CityActivities/{id}", activity);
 
@@ -88,7 +102,7 @@ namespace kmc.Client.Controllers
         // GET: CityActivities/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateAuthenticatedClient(); // Uses new helper!
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
@@ -105,46 +119,39 @@ namespace kmc.Client.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = _httpClientFactory.CreateClient();
+            var client = CreateAuthenticatedClient(); // Uses new helper!
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.DeleteAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             return BadRequest("Delete failed.");
         }
 
-        // ==========================================
-        // NEW BOOKING METHODS BELOW!
-        // ==========================================
-
-        // GET: CityActivities/Book/5 (Shows the booking form)
+        // GET: CityActivities/Book/5
         public IActionResult Book(int id)
         {
             var booking = new EventBookingViewModel { ActivityId = id };
             return View(booking);
         }
 
-        // POST: CityActivities/Book (Sends booking to API)
+        // POST: CityActivities/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(EventBookingViewModel booking)
         {
             if (ModelState.IsValid)
             {
-                var client = _httpClientFactory.CreateClient();
+                var client = CreateAuthenticatedClient(); // Uses new helper!
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
-                // Call the EventBookings API we just built!
                 var response = await client.PostAsJsonAsync($"{baseUrl}/api/EventBookings", booking);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    // Save a temporary message to show the user it worked!
                     TempData["SuccessMessage"] = "Your booking was successfully confirmed!";
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    // If the API blocks it (e.g., event is full), extract the error and show it
                     var errorMessage = await response.Content.ReadAsStringAsync();
                     ModelState.AddModelError(string.Empty, errorMessage);
                 }

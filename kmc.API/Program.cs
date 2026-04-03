@@ -17,14 +17,14 @@ namespace kmc.API
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // 2. Add Identity (User Management)
+            // 2. Add Identity (User & Role Management)
             builder.Services.AddIdentity<IdentityUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
             // 3. Add JWT Authentication (The VIP Wristbands)
             var jwtSettings = builder.Configuration.GetSection("Jwt");
-            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]);
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
 
             builder.Services.AddAuthentication(options =>
             {

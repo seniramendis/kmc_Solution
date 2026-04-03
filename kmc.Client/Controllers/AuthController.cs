@@ -1,6 +1,9 @@
 ﻿using kmc.Client.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Net.Http.Json; // <-- THIS WAS THE MISSING PIECE!
 
 namespace kmc.Client.Controllers
 {
@@ -15,13 +18,8 @@ namespace kmc.Client.Controllers
             _configuration = configuration;
         }
 
-        // GET: Auth/Register
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() { return View(); }
 
-        // POST: Auth/Register
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -30,8 +28,6 @@ namespace kmc.Client.Controllers
 
             var client = _httpClientFactory.CreateClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
-            // Calls the API to create the user
             var response = await client.PostAsJsonAsync($"{baseUrl}/api/auth/register", model);
 
             if (response.IsSuccessStatusCode)
@@ -40,17 +36,12 @@ namespace kmc.Client.Controllers
                 return RedirectToAction("Login");
             }
 
-            ModelState.AddModelError(string.Empty, "Registration failed. Email might already be taken or password isn't strong enough (Needs 1 uppercase, 1 number, 1 special character).");
+            ModelState.AddModelError(string.Empty, "Registration failed. Check password requirements.");
             return View(model);
         }
 
-        // GET: Auth/Login
-        public IActionResult Login()
-        {
-            return View();
-        }
+        public IActionResult Login() { return View(); }
 
-        // POST: Auth/Login
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
@@ -59,8 +50,6 @@ namespace kmc.Client.Controllers
 
             var client = _httpClientFactory.CreateClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
-            // Calls the API to check the password
             var response = await client.PostAsJsonAsync($"{baseUrl}/api/auth/login", model);
 
             if (response.IsSuccessStatusCode)
@@ -69,26 +58,29 @@ namespace kmc.Client.Controllers
                 using var doc = JsonDocument.Parse(jsonString);
                 var token = doc.RootElement.GetProperty("token").GetString();
 
-                // MAGIC HAPPENS HERE: We save the token in a secure browser cookie!
-                Response.Cookies.Append("JWToken", token, new CookieOptions
+                Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
+
+                // Read the role from the token and save it to the website so we can hide/show buttons
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value;
+
+                if (role != null)
                 {
-                    HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict
-                });
+                    Response.Cookies.Append("UserRole", role);
+                }
 
                 return RedirectToAction("Index", "Home");
             }
 
-            ModelState.AddModelError(string.Empty, "Invalid login attempt. Check your email and password.");
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }
 
-        // GET: Auth/Logout
         public IActionResult Logout()
         {
-            // Deletes the cookie to log them out
             Response.Cookies.Delete("JWToken");
+            Response.Cookies.Delete("UserRole");
             return RedirectToAction("Index", "Home");
         }
     }
