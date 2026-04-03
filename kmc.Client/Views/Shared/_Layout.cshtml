@@ -3,44 +3,44 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - kmc.Client</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <title>@ViewData["Title"] - KMC Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootswatch@5.3.2/dist/zephyr/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/kmc.Client.styles.css" asp-append-version="true" />
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">KMC Portal</a>
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-4 sticky-top">
+            <div class="container-fluid px-4">
+                <a class="navbar-brand fw-bolder fs-4" style="color: var(--kandy-dark-teal);" asp-area="" asp-controller="Home" asp-action="Index">KMC Portal</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 align-items-center">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="CityActivities" asp-action="Index">City Activities</a>
+                        <li class="nav-item ms-2">
+                            <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="CityActivities" asp-action="Index">City Activities</a>
                         </li>
                         
                         @if (Context.Request.Cookies["UserRole"] == "Resident")
                         {
-                            <li class="nav-item ms-2">
-                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="CityActivities" asp-action="MyBookings">🎟️ My Tickets</a>
+                            <li class="nav-item ms-3">
+                                <a class="nav-link fw-bold" style="color: var(--kandy-emerald);" asp-area="" asp-controller="CityActivities" asp-action="MyBookings">My Tickets</a>
                             </li>
                         }
 
                         @if (Context.Request.Cookies["UserRole"] == "Organizer")
                         {
-                            <li class="nav-item ms-2">
-                                <a class="nav-link text-primary fw-bold" asp-area="" asp-controller="CityActivities" asp-action="Dashboard">📊 Dashboard</a>
+                            <li class="nav-item ms-3">
+                                <a class="nav-link fw-bold" style="color: var(--kandy-gold);" asp-area="" asp-controller="CityActivities" asp-action="Dashboard">Dashboard</a>
                             </li>
                         }
                     </ul>
                     
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-center">
                         @if (Context.Request.Cookies["JWToken"] != null)
                         {
                             <li class="nav-item">
@@ -50,23 +50,55 @@
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Log In</a>
+                                <a class="nav-link text-dark fw-semibold" asp-area="" asp-controller="Auth" asp-action="Login">Log In</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link btn btn-primary text-white ms-2" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
+                            <li class="nav-item ms-2">
+                                <a class="nav-link btn btn-emerald px-4 rounded-pill text-white fw-bold shadow-sm" asp-area="" asp-controller="Auth" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>
-
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
+    
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-5 mb-5">
             @RenderBody()
         </main>
     </div>
+
+    <footer class="bg-dark text-light pt-5 pb-3 mt-auto border-top border-4" style="border-color: var(--kandy-gold) !important;">
+        <div class="container">
+            <div class="row mb-4">
+                <div class="col-md-5 mb-4 mb-md-0">
+                    <h4 class="fw-bold mb-3" style="color: var(--kandy-gold);">KMC Portal</h4>
+                    <p class="text-white-50 pe-md-5">
+                        Dedicated to enhancing community engagement by seamlessly connecting city residents with vibrant local events, sports, and cultural workshops.
+                    </p>
+                </div>
+                <div class="col-md-3 mb-4 mb-md-0">
+                    <h5 class="fw-bold mb-3">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a asp-controller="Home" asp-action="Index" class="text-white-50 text-decoration-none">Home</a></li>
+                        <li class="mb-2"><a asp-controller="CityActivities" asp-action="Index" class="text-white-50 text-decoration-none">Browse Activities</a></li>
+                        <li class="mb-2"><a asp-controller="Auth" asp-action="Register" class="text-white-50 text-decoration-none">Become an Organizer</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <h5 class="fw-bold mb-3">Contact Us</h5>
+                    <ul class="list-unstyled text-white-50">
+                        <li class="mb-2"><strong>Office:</strong> Kandy Municipal Council</li>
+                        <li class="mb-2"><strong>Phone:</strong> +94 81 222 2222</li>
+                        <li class="mb-2"><strong>Email:</strong> support@kandy.mc.gov.lk</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-center border-top border-secondary pt-3 text-white-50 small">
+                &copy; @DateTime.Now.Year - Kandy Municipal Council Portal. All rights reserved.
+            </div>
+        </div>
+    </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

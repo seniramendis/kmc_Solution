@@ -1,44 +1,57 @@
 ﻿@model kmc.Client.Models.RegisterViewModel
 @{ ViewData["Title"] = "Register"; }
 
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-header bg-success text-white text-center">
-                    <h3 class="mb-0">Create an Account</h3>
+            
+            <div class="card shadow-lg border-0 rounded-4 hover-card">
+                <div class="card-header text-white text-center p-4 border-0 rounded-top-4" style="background-color: var(--kandy-dark-teal);">
+                    <h3 class="mb-0 fw-bolder">Create an Account</h3>
                 </div>
-                <div class="card-body p-4">
+                
+                <div class="card-body p-5 bg-white">
                     <form asp-action="Register">
-                        <div asp-validation-summary="All" class="text-danger mb-3 fw-bold"></div>
+                        <div asp-validation-summary="All" class="text-danger mb-3 fw-bold text-center"></div>
                         
-                        <div class="mb-3">
-                            <label asp-for="Email" class="form-label fw-bold">Email Address</label>
-                            <input asp-for="Email" class="form-control form-control-lg" required />
+                        <div class="mb-4">
+                            <label asp-for="Email" class="form-label fw-bold text-muted">Email Address</label>
+                            <input asp-for="Email" class="form-control form-control-lg bg-light border-0 rounded-3" placeholder="name@example.com" required />
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Role" class="form-label fw-bold">Account Type</label>
-                            <select asp-for="Role" class="form-select form-select-lg" required>
+                        <div class="mb-4">
+                            <label asp-for="Role" class="form-label fw-bold text-muted">Account Type</label>
+                            <select asp-for="Role" class="form-select form-select-lg bg-light border-0 rounded-3 fw-semibold text-secondary" required>
                                 <option value="">-- Select your Role --</option>
                                 <option value="Resident">City Resident (Can Book Events)</option>
                                 <option value="Organizer">City Organizer (Can Create Events)</option>
                             </select>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="Password" class="form-label fw-bold">Password</label>
-                            <input asp-for="Password" class="form-control form-control-lg" required />
-                            <small class="text-muted">Must have 1 uppercase, 1 number, and 1 special character.</small>
-                        </div>
                         <div class="mb-4">
-                            <label asp-for="ConfirmPassword" class="form-label fw-bold">Confirm Password</label>
-                            <input asp-for="ConfirmPassword" class="form-control form-control-lg" required />
+                            <label asp-for="Password" class="form-label fw-bold text-muted">Password</label>
+                            <input asp-for="Password" class="form-control form-control-lg bg-light border-0 rounded-3" placeholder="Create a password" required />
                         </div>
-                        <button type="submit" class="btn btn-success btn-lg w-100">Register</button>
+                        
+                        <div class="mb-4">
+                            <label asp-for="ConfirmPassword" class="form-label fw-bold text-muted">Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control form-control-lg bg-light border-0 rounded-3" placeholder="Confirm your password" required />
+                        </div>
+                        
+                        <button type="submit" class="btn btn-gold btn-lg w-100 fw-bold rounded-pill shadow-sm mt-2 text-white">Register</button>
                     </form>
+
+                    <div class="text-center mt-4">
+                        <p class="text-muted small mb-0">Already have an account?</p>
+                        <a asp-action="Login" class="fw-bold text-decoration-none fs-6" style="color: var(--kandy-emerald);">Log in here</a>
+                    </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -2,56 +2,52 @@
 @{
     ViewData["Title"] = "Organizer Dashboard";
     
-    // Calculate the Analytics!
     var totalEvents = Model?.Count() ?? 0;
     var totalCapacity = Model?.Sum(a => a.MaxParticipants) ?? 0;
     var upcomingEvents = Model?.Where(a => a.ScheduledDate > DateTime.Now).OrderBy(a => a.ScheduledDate).Take(5);
 }
 
-<div class="container mt-4">
-    <h2 class="fw-bold text-primary">📊 Organizer Dashboard</h2>
+<div class="container mt-5">
+    <h2 class="fw-bolder" style="color: var(--kandy-dark-teal);">Organizer Dashboard</h2>
     <p class="text-muted">High-level overview of your city activities and capacities.</p>
-    <hr />
     
-    <div class="row mb-5 mt-4">
+    <div class="row mb-5 mt-4 g-4">
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-primary text-white rounded-4 h-100">
+            <div class="card shadow border-0 rounded-4 h-100 hover-card" style="background-color: var(--kandy-dark-teal); color: white;">
                 <div class="card-body p-4 text-center">
-                    <h5 class="card-title fw-light">Total Events</h5>
-                    <h1 class="display-3 fw-bold">@totalEvents</h1>
-                    <p class="mb-0 small">Published activities</p>
+                    <h5 class="card-title fw-light opacity-75">Total Events</h5>
+                    <h1 class="display-3 fw-bold mb-0">@totalEvents</h1>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-dark text-white rounded-4 h-100">
+            <div class="card shadow border-0 rounded-4 h-100 hover-card" style="background-color: var(--kandy-emerald); color: white;">
                 <div class="card-body p-4 text-center">
-                    <h5 class="card-title fw-light">Total Capacity</h5>
-                    <h1 class="display-3 fw-bold">@totalCapacity</h1>
-                    <p class="mb-0 small">Available spots across all events</p>
+                    <h5 class="card-title fw-light opacity-75">Total Capacity</h5>
+                    <h1 class="display-3 fw-bold mb-0">@totalCapacity</h1>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card shadow-sm border-0 bg-info text-white rounded-4 h-100">
+            <div class="card shadow border-0 rounded-4 h-100 hover-card" style="background-color: var(--kandy-gold); color: white;">
                 <div class="card-body p-4 text-center d-flex flex-column justify-content-center">
-                    <h5 class="card-title fw-light mb-3">Quick Action</h5>
-                    <a asp-action="Create" class="btn btn-light btn-lg w-100 fw-bold rounded-pill text-info shadow-sm">Create Event +</a>
+                    <h5 class="card-title fw-bold text-white mb-3">Quick Action</h5>
+                    <a asp-action="Create" class="btn btn-light btn-lg w-100 fw-bold rounded-pill shadow-sm" style="color: var(--kandy-gold);">Create Event +</a>
                 </div>
             </div>
         </div>
     </div>
 
-    <h4 class="fw-bold mb-3">📅 Upcoming Schedule</h4>
-    <div class="card shadow-sm border-0 rounded-4">
+    <h4 class="fw-bolder mb-4" style="color: var(--kandy-dark-teal);">Upcoming Schedule</h4>
+    <div class="card shadow-sm border-0 rounded-4 hover-card">
         <div class="card-body p-0">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
+            <table class="table mb-0">
+                <thead style="background-color: #f1f3f5; color: var(--kandy-dark-teal);">
                     <tr>
-                        <th class="p-3">Activity Name</th>
-                        <th class="p-3">Date</th>
-                        <th class="p-3">Capacity</th>
-                        <th class="p-3 text-center">Manage</th>
+                        <th class="p-4 border-0">Activity Name</th>
+                        <th class="p-4 border-0">Date</th>
+                        <th class="p-4 border-0">Capacity</th>
+                        <th class="p-4 border-0 text-center">Manage</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,11 +56,11 @@
                         foreach (var item in upcomingEvents)
                         {
                             <tr>
-                                <td class="p-3 fw-bold align-middle">@item.ActivityName</td>
-                                <td class="p-3 align-middle">@item.ScheduledDate.ToString("MMM dd, yyyy")</td>
-                                <td class="p-3 align-middle">@item.MaxParticipants spots</td>
-                                <td class="p-3 text-center align-middle">
-                                    <a asp-action="Attendees" asp-route-id="@item.ActivityId" class="btn btn-sm btn-outline-primary fw-bold px-3 rounded-pill">View Attendees</a>
+                                <td class="p-4 fw-bold align-middle">@item.ActivityName</td>
+                                <td class="p-4 align-middle text-muted">@item.ScheduledDate.ToString("MMM dd, yyyy")</td>
+                                <td class="p-4 align-middle text-muted fw-semibold">@item.MaxParticipants spots</td>
+                                <td class="p-4 text-center align-middle">
+                                    <a asp-action="Attendees" asp-route-id="@item.ActivityId" class="btn btn-sm btn-outline-dark fw-bold px-4 rounded-pill">View Attendees</a>
                                 </td>
                             </tr>
                         }

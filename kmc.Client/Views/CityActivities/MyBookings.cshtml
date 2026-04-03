@@ -4,28 +4,29 @@
     ViewData["Title"] = "My Bookings";
 }
 
-<div class="container mt-4">
-    <h2 class="text-success fw-bold">🎟️ My Event Tickets</h2>
+<div class="container mt-5">
+    <h2 class="fw-bolder" style="color: var(--kandy-emerald);">My Event Tickets</h2>
     <p class="text-muted">Here are all the city activities you have successfully registered for.</p>
-    <hr />
 
-    <div class="row mt-4">
+    <div class="row mt-5 g-4">
         @if (Model != null && Model.Any())
         {
             foreach (var booking in Model)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm border-success h-100 rounded-3">
-                        <div class="card-header bg-success text-white fw-bold">
-                            @booking.CityActivity?.ActivityName
+                    <div class="card hover-card shadow-sm h-100 rounded-4" style="border: 2px solid var(--kandy-emerald) !important;">
+                        <div class="card-header border-0 p-4 text-center" style="background-color: var(--kandy-emerald); color: white;">
+                            <h4 class="fw-bold mb-0">@booking.CityActivity?.ActivityName</h4>
                         </div>
-                        <div class="card-body">
-                            <p class="mb-1"><strong>📍 Venue:</strong> @booking.CityActivity?.Venue</p>
-                            <p class="mb-1"><strong>📅 Date:</strong> @booking.CityActivity?.ScheduledDate.ToString("MMM dd, yyyy h:mm tt")</p>
-                            <p class="mb-1"><strong>🏷️ Category:</strong> <span class="badge bg-secondary">@booking.CityActivity?.Category</span></p>
-                            <hr />
-                            <p class="mb-0 text-muted small"><strong>Ticket Holder:</strong> @booking.ResidentName</p>
-                            <p class="mb-0 text-muted small"><strong>Booked On:</strong> @booking.BookingDate.ToString("MMM dd, yyyy")</p>
+                        <div class="card-body p-4">
+                            <p class="mb-2 text-muted"><strong style="color: var(--kandy-dark-teal);">Venue:</strong> @booking.CityActivity?.Venue</p>
+                            <p class="mb-2 text-muted"><strong style="color: var(--kandy-dark-teal);">Date:</strong> @booking.CityActivity?.ScheduledDate.ToString("MMM dd, yyyy h:mm tt")</p>
+                            <p class="mb-4"><strong style="color: var(--kandy-dark-teal);">Category:</strong> <span class="badge rounded-pill shadow-sm ms-2" style="background-color: var(--kandy-gold); color: white;">@booking.CityActivity?.Category</span></p>
+                            
+                            <div class="p-3 rounded-3" style="background-color: #f8f9fa;">
+                                <p class="mb-1 text-muted small"><strong>Ticket Holder:</strong> @booking.ResidentName</p>
+                                <p class="mb-0 text-muted small"><strong>Booked On:</strong> @booking.BookingDate.ToString("MMM dd, yyyy")</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,10 +35,10 @@
         else
         {
             <div class="col-12">
-                <div class="alert alert-info text-center p-5 rounded-4 shadow-sm">
-                    <h4>You haven't booked any events yet!</h4>
-                    <p>Head over to the Activities page to discover what's happening in your city.</p>
-                    <a asp-action="Index" class="btn btn-primary mt-3 px-4 rounded-pill">Explore Events</a>
+                <div class="card border-0 shadow-sm rounded-4 text-center p-5 mt-4" style="background-color: #f8f9fa;">
+                    <h4 class="fw-bold" style="color: var(--kandy-dark-teal);">You haven't booked any events yet!</h4>
+                    <p class="text-muted mb-4">Head over to the Activities page to discover what's happening in your city.</p>
+                    <a asp-action="Index" class="btn btn-emerald btn-lg px-5 rounded-pill fw-bold shadow-sm">Explore Events</a>
                 </div>
             </div>
         }

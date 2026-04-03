@@ -1,46 +1,58 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    // We check the role so we can show smart buttons!
     var userRole = Context.Request.Cookies["UserRole"];
 }
 
-<div class="container mt-5">
-    <div class="text-center mb-5">
-        <h1 class="display-3 fw-bold text-primary">Welcome to the KMC Portal</h1>
-        <p class="lead text-muted mt-3">The official platform for managing and discovering city events.</p>
+<div class="hero-wrapper">
+    <div class="hero-section text-center pb-5">
+        <h1 class="display-2 fw-bolder text-white mb-3" style="text-shadow: 0 4px 15px rgba(0,0,0,0.3);">Kandy Municipal Council</h1>
+        <p class="lead text-white mb-5 mx-auto fs-4" style="max-width: 700px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);">
+            The premier digital platform for discovering, booking, and managing dynamic city-wide activities and community events.
+        </p>
+        
+        @if(userRole == null) 
+        {
+            <a asp-controller="Auth" asp-action="Register" class="btn btn-gold btn-lg px-5 py-3 rounded-pill fw-bold fs-5 shadow">Get Started Now</a>
+        }
     </div>
+</div>
 
-    <div class="row text-center mt-5">
-        <div class="col-md-6 mb-4">
-            <div class="card shadow border-0 h-100 rounded-4">
-                <div class="card-body p-5 bg-light rounded-4">
-                    <h2 class="fw-bold text-success">🏙️ City Residents</h2>
-                    <p class="mt-3 text-secondary">Discover exciting local events, sports, and workshops. Find what you love and book your spot instantly.</p>
-                    <a asp-controller="CityActivities" asp-action="Index" class="btn btn-success btn-lg mt-4 px-5 rounded-pill">Explore Events</a>
+<div class="container">
+    <div class="row g-5 mt-4 mb-5">
+        
+        <div class="col-md-6">
+            <div class="card hover-card shadow-sm h-100">
+                <img src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Residents enjoying an event">
+                <div class="card-body p-5 text-center">
+                    <h3 class="fw-bold mb-3" style="color: var(--kandy-dark-teal);">City Residents</h3>
+                    <p class="text-muted mb-4">Discover exciting local events, sports leagues, and creative workshops. Find what you love and secure your spot instantly.</p>
+                    <a asp-controller="CityActivities" asp-action="Index" class="btn btn-emerald btn-lg px-4 rounded-pill w-100 fw-bold shadow-sm">Explore Events</a>
                 </div>
             </div>
         </div>
 
-        <div class="col-md-6 mb-4">
-            <div class="card shadow border-0 h-100 rounded-4">
-                <div class="card-body p-5 bg-light rounded-4">
-                    <h2 class="fw-bold text-primary">📅 Event Organizers</h2>
-                    <p class="mt-3 text-secondary">Plan, publish, and manage your city activities. Reach thousands of residents and track your bookings in real-time.</p>
+        <div class="col-md-6">
+            <div class="card hover-card shadow-sm h-100">
+                <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=800&q=80" class="card-img-top" alt="Organizer planning an event">
+                <div class="card-body p-5 text-center">
+                    <h3 class="fw-bold mb-3" style="color: var(--kandy-dark-teal);">Event Organizers</h3>
+                    <p class="text-muted mb-4">Plan, publish, and manage your city activities. Reach thousands of residents and track your live bookings via the analytics dashboard.</p>
                     
                     @if(userRole == "Organizer")
                     {
-                        <a asp-controller="CityActivities" asp-action="Create" class="btn btn-primary btn-lg mt-4 px-5 rounded-pill">Create an Event</a>
+                        <a asp-controller="CityActivities" asp-action="Create" class="btn btn-gold btn-lg px-4 rounded-pill w-100 fw-bold shadow-sm">Create an Event</a>
                     }
                     else if(userRole == "Resident")
                     {
-                        <a asp-controller="CityActivities" asp-action="Index" class="btn btn-outline-primary btn-lg mt-4 px-5 rounded-pill">View Schedule</a>
+                        <a asp-controller="CityActivities" asp-action="Index" class="btn btn-outline-dark btn-lg px-4 rounded-pill w-100 fw-bold">View Schedule</a>
                     }
                     else
                     {
-                        <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-primary btn-lg mt-4 px-5 rounded-pill">Join as Organizer</a>
+                        <a asp-controller="Auth" asp-action="Register" class="btn btn-outline-dark btn-lg px-4 rounded-pill w-100 fw-bold">Join as Organizer</a>
                     }
                 </div>
             </div>
         </div>
+        
     </div>
 </div>

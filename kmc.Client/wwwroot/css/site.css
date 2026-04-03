@@ -1,22 +1,118 @@
+﻿/* 🌟 KANDYAN CULTURAL COLOR PALETTE 🌟 */
+:root {
+    --kandy-gold: #F39C12;
+    --kandy-gold-hover: #D68910;
+    --kandy-emerald: #1E8449;
+    --kandy-emerald-hover: #145A32;
+    --kandy-dark-teal: #0E6251;
+}
+
+/* 🌟 Stops the edge-to-edge image from causing horizontal scrolling! */
+html, body {
+    overflow-x: hidden;
+}
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    background-color: #f8f9fa;
+}
+
+/* 🌟 FIX: Force input text and hints (placeholders) to be perfectly visible */
+.form-control, .form-select {
+    color: #212529 !important; /* Forces typed text to be dark */
+}
+
+    .form-control::placeholder {
+        color: #6c757d !important; /* Forces the hint text to be dark gray */
+        opacity: 0.8 !important;
+    }
+
+    .form-control:focus, .form-select:focus {
+        background-color: #ffffff !important;
+        color: #212529 !important;
+        border-color: var(--kandy-emerald) !important;
+        box-shadow: 0 0 0 0.25rem rgba(30, 132, 73, 0.25) !important;
+    }
+
+/* 🌟 EDGE-TO-EDGE FULL SCREEN HERO 🌟 */
+.hero-wrapper {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: -1.5rem;
+}
+
+.hero-section {
+    background: linear-gradient(rgba(14, 98, 81, 0.65), rgba(20, 90, 50, 0.8)), url('https://www.laurewanders.com/wp-content/uploads/2024/10/1-day-in-Kandy-00002.jpg') center/cover;
+    background-position: center 30%;
+    color: white;
+    min-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+/* 🌟 CUSTOM CULTURAL BUTTONS 🌟 */
+.btn-gold {
+    background-color: var(--kandy-gold);
+    color: #fff;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .btn-gold:hover {
+        background-color: var(--kandy-gold-hover);
+        color: #fff;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(243, 156, 18, 0.4);
+    }
+
+.btn-emerald {
+    background-color: var(--kandy-emerald);
+    color: #fff;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+    .btn-emerald:hover {
+        background-color: var(--kandy-emerald-hover);
+        color: #fff;
+        transform: translateY(-2px);
+    }
+
+/* Smooth Card Animations */
+.hover-card {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    border: none !important;
+    border-radius: 1.5rem;
+    background: white;
+}
+
+    .hover-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12) !important;
+    }
+
+.card-img-top {
+    height: 280px;
+    object-fit: cover;
+}
+
+.navbar {
+    background: rgba(255, 255, 255, 0.98) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08) !important;
 }
