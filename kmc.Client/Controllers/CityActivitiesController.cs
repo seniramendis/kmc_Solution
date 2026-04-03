@@ -17,7 +17,6 @@ namespace kmc.Client.Controllers
             _configuration = configuration;
         }
 
-        // HELPER METHOD: Attaches the VIP Wristband (Token) to API requests
         private HttpClient CreateAuthenticatedClient()
         {
             var client = _httpClientFactory.CreateClient();
@@ -29,10 +28,9 @@ namespace kmc.Client.Controllers
             return client;
         }
 
-        // GET: CityActivities
         public async Task<IActionResult> Index()
         {
-            var client = CreateAuthenticatedClient(); // Uses new helper!
+            var client = CreateAuthenticatedClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities");
@@ -46,17 +44,15 @@ namespace kmc.Client.Controllers
             return View(new List<CityActivityViewModel>());
         }
 
-        // GET: CityActivities/Create
         public IActionResult Create() { return View(); }
 
-        // POST: CityActivities/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CityActivityViewModel activity)
         {
             if (ModelState.IsValid)
             {
-                var client = CreateAuthenticatedClient(); // Uses new helper!
+                var client = CreateAuthenticatedClient();
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
                 var response = await client.PostAsJsonAsync($"{baseUrl}/api/CityActivities", activity);
@@ -65,10 +61,9 @@ namespace kmc.Client.Controllers
             return View(activity);
         }
 
-        // GET: CityActivities/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            var client = CreateAuthenticatedClient(); // Uses new helper!
+            var client = CreateAuthenticatedClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
@@ -80,7 +75,6 @@ namespace kmc.Client.Controllers
             return NotFound();
         }
 
-        // POST: CityActivities/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CityActivityViewModel activity)
@@ -89,7 +83,7 @@ namespace kmc.Client.Controllers
 
             if (ModelState.IsValid)
             {
-                var client = CreateAuthenticatedClient(); // Uses new helper!
+                var client = CreateAuthenticatedClient();
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
                 var response = await client.PutAsJsonAsync($"{baseUrl}/api/CityActivities/{id}", activity);
 
@@ -99,10 +93,9 @@ namespace kmc.Client.Controllers
             return View(activity);
         }
 
-        // GET: CityActivities/Delete/5
         public async Task<IActionResult> Delete(int id)
         {
-            var client = CreateAuthenticatedClient(); // Uses new helper!
+            var client = CreateAuthenticatedClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
@@ -114,33 +107,30 @@ namespace kmc.Client.Controllers
             return NotFound();
         }
 
-        // POST: CityActivities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = CreateAuthenticatedClient(); // Uses new helper!
+            var client = CreateAuthenticatedClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
             var response = await client.DeleteAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             return BadRequest("Delete failed.");
         }
 
-        // GET: CityActivities/Book/5
         public IActionResult Book(int id)
         {
             var booking = new EventBookingViewModel { ActivityId = id };
             return View(booking);
         }
 
-        // POST: CityActivities/Book
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Book(EventBookingViewModel booking)
         {
             if (ModelState.IsValid)
             {
-                var client = CreateAuthenticatedClient(); // Uses new helper!
+                var client = CreateAuthenticatedClient();
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
                 var response = await client.PostAsJsonAsync($"{baseUrl}/api/EventBookings", booking);
@@ -158,13 +148,12 @@ namespace kmc.Client.Controllers
             }
             return View(booking);
         }
-        // GET: CityActivities/MyBookings
+
         public async Task<IActionResult> MyBookings()
         {
-            var client = CreateAuthenticatedClient(); // Attach the wristband!
+            var client = CreateAuthenticatedClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
 
-            // Call the new API endpoint we just made
             var response = await client.GetAsync($"{baseUrl}/api/EventBookings/MyBookings");
 
             if (response.IsSuccessStatusCode)
@@ -174,8 +163,43 @@ namespace kmc.Client.Controllers
                 return View(bookings);
             }
 
-            // If it fails or they have no bookings, just show an empty list
             return View(new List<EventBookingViewModel>());
+        }
+
+        public async Task<IActionResult> Attendees(int id)
+        {
+            var client = CreateAuthenticatedClient();
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            var response = await client.GetAsync($"{baseUrl}/api/EventBookings/Activity/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var bookings = JsonSerializer.Deserialize<List<EventBookingViewModel>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return View(bookings);
+            }
+
+            return View(new List<EventBookingViewModel>());
+        }
+
+        // 🌟 NEW: GET: CityActivities/Dashboard (Organizer Analytics)
+        public async Task<IActionResult> Dashboard()
+        {
+            var client = CreateAuthenticatedClient();
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            var response = await client.GetAsync($"{baseUrl}/api/CityActivities");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var activities = JsonSerializer.Deserialize<List<CityActivityViewModel>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+                // Send the data to our new Dashboard view!
+                return View(activities);
+            }
+            return View(new List<CityActivityViewModel>());
         }
     }
 }

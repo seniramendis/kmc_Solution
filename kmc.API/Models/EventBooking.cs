@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema; // 🌟 ADDED: We need this to use the ForeignKey tag!
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace kmc.API.Models
 {
@@ -20,8 +20,8 @@ namespace kmc.API.Models
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
 
-        // 🌟 ADDED: This explicitly tells the database to use ActivityId to join the tables!
+        // 🌟 THE FIX: Added a '?' here too!
         [ForeignKey("ActivityId")]
-        public CityActivity CityActivity { get; set; }
+        public CityActivity? CityActivity { get; set; }
     }
 }

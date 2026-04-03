@@ -17,7 +17,7 @@ namespace kmc.API.Controllers
             _context = context;
         }
 
-        // POST: api/EventBookings (LOCKED - Must be a Resident)
+        // POST: api/EventBookings (LOCKED - Resident Only)
         [Authorize(Roles = "Resident")]
         [HttpPost]
         public async Task<ActionResult<EventBooking>> PostEventBooking(EventBooking booking)
@@ -38,20 +38,30 @@ namespace kmc.API.Controllers
         }
 
         // GET: api/EventBookings/MyBookings (LOCKED - Resident Only)
-        // 🌟 NEW: This method grabs the user's email from their Token and finds their tickets!
         [Authorize(Roles = "Resident")]
         [HttpGet("MyBookings")]
         public async Task<ActionResult<IEnumerable<EventBooking>>> GetMyBookings()
         {
-            // Extract the logged-in user's email from their Token
             var userEmail = User.Identity.Name;
 
             var myBookings = await _context.EventBookings
-                .Include(b => b.CityActivity) // Automatically joins the Event data so we know the name of the activity!
+                .Include(b => b.CityActivity)
                 .Where(b => b.ContactEmail == userEmail)
                 .ToListAsync();
 
             return myBookings;
+        }
+
+        // 🌟 NEW: GET: api/EventBookings/Activity/5 (LOCKED - Organizer Only)
+        [Authorize(Roles = "Organizer")]
+        [HttpGet("Activity/{activityId}")]
+        public async Task<ActionResult<IEnumerable<EventBooking>>> GetBookingsForActivity(int activityId)
+        {
+            var bookings = await _context.EventBookings
+                .Where(b => b.ActivityId == activityId)
+                .ToListAsync();
+
+            return bookings;
         }
     }
 }

@@ -12,8 +12,8 @@ using kmc.API.Data;
 namespace kmc.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260403162741_FixIdentityKeys")]
-    partial class FixIdentityKeys
+    [Migration("20260403163410_FreshStart")]
+    partial class FreshStart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

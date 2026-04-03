@@ -31,6 +31,13 @@
                                 <a class="nav-link text-success fw-bold" asp-area="" asp-controller="CityActivities" asp-action="MyBookings">🎟️ My Tickets</a>
                             </li>
                         }
+
+                        @if (Context.Request.Cookies["UserRole"] == "Organizer")
+                        {
+                            <li class="nav-item ms-2">
+                                <a class="nav-link text-primary fw-bold" asp-area="" asp-controller="CityActivities" asp-action="Dashboard">📊 Dashboard</a>
+                            </li>
+                        }
                     </ul>
                     
                     <ul class="navbar-nav">
