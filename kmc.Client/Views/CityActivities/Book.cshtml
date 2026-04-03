@@ -1,0 +1,33 @@
+﻿@model kmc.Client.Models.EventBookingViewModel
+
+@{
+    ViewData["Title"] = "Book Activity";
+}
+
+<div class="container mt-4">
+    <h2 class="text-success">Book City Activity</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Book">
+                <div asp-validation-summary="All" class="text-danger mb-3 fw-bold"></div>
+
+                <input type="hidden" asp-for="ActivityId" />
+
+                <div class="mb-3">
+                    <label asp-for="ResidentName" class="form-label">Your Full Name</label>
+                    <input asp-for="ResidentName" class="form-control" required />
+                </div>
+                
+                <div class="mb-3">
+                    <label asp-for="ContactEmail" class="form-label">Your Email</label>
+                    <input asp-for="ContactEmail" class="form-control" type="email" required />
+                </div>
+
+                <button type="submit" class="btn btn-success">Confirm Booking</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

@@ -8,6 +8,14 @@
     <h2>Available City Activities</h2>
     <hr />
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>Success!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <div class="mb-3">
         <a asp-action="Create" class="btn btn-primary">Create New Activity +</a>
     </div>
@@ -37,6 +45,8 @@
                         <td>
                             <a asp-action="Edit" asp-route-id="@item.ActivityId" class="btn btn-sm btn-warning">Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.ActivityId" class="btn btn-sm btn-danger ms-1">Delete</a>
+                            
+                            <a asp-action="Book" asp-route-id="@item.ActivityId" class="btn btn-sm btn-success ms-1">Book Now</a>
                         </td>
                     </tr>
                 }

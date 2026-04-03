@@ -30,15 +30,11 @@ namespace kmc.Client.Controllers
                 var activities = JsonSerializer.Deserialize<List<CityActivityViewModel>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
                 return View(activities);
             }
-
             return View(new List<CityActivityViewModel>());
         }
 
         // GET: CityActivities/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() { return View(); }
 
         // POST: CityActivities/Create
         [HttpPost]
@@ -49,13 +45,8 @@ namespace kmc.Client.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
                 var response = await client.PostAsJsonAsync($"{baseUrl}/api/CityActivities", activity);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
+                if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             }
             return View(activity);
         }
@@ -65,7 +56,6 @@ namespace kmc.Client.Controllers
         {
             var client = _httpClientFactory.CreateClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -87,17 +77,10 @@ namespace kmc.Client.Controllers
             {
                 var client = _httpClientFactory.CreateClient();
                 var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
                 var response = await client.PutAsJsonAsync($"{baseUrl}/api/CityActivities/{id}", activity);
 
-                if (response.IsSuccessStatusCode)
-                {
-                    return RedirectToAction(nameof(Index));
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Update failed. Make sure you are the original Organizer.");
-                }
+                if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+                else ModelState.AddModelError(string.Empty, "Update failed. Make sure you are the original Organizer.");
             }
             return View(activity);
         }
@@ -107,7 +90,6 @@ namespace kmc.Client.Controllers
         {
             var client = _httpClientFactory.CreateClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
             var response = await client.GetAsync($"{baseUrl}/api/CityActivities/{id}");
             if (response.IsSuccessStatusCode)
             {
@@ -125,16 +107,49 @@ namespace kmc.Client.Controllers
         {
             var client = _httpClientFactory.CreateClient();
             var baseUrl = _configuration["ApiSettings:BaseUrl"];
-
-            // This sends the DELETE request to your API!
             var response = await client.DeleteAsync($"{baseUrl}/api/CityActivities/{id}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToAction(nameof(Index));
-            }
-
+            if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
             return BadRequest("Delete failed.");
+        }
+
+        // ==========================================
+        // NEW BOOKING METHODS BELOW!
+        // ==========================================
+
+        // GET: CityActivities/Book/5 (Shows the booking form)
+        public IActionResult Book(int id)
+        {
+            var booking = new EventBookingViewModel { ActivityId = id };
+            return View(booking);
+        }
+
+        // POST: CityActivities/Book (Sends booking to API)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Book(EventBookingViewModel booking)
+        {
+            if (ModelState.IsValid)
+            {
+                var client = _httpClientFactory.CreateClient();
+                var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+                // Call the EventBookings API we just built!
+                var response = await client.PostAsJsonAsync($"{baseUrl}/api/EventBookings", booking);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    // Save a temporary message to show the user it worked!
+                    TempData["SuccessMessage"] = "Your booking was successfully confirmed!";
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    // If the API blocks it (e.g., event is full), extract the error and show it
+                    var errorMessage = await response.Content.ReadAsStringAsync();
+                    ModelState.AddModelError(string.Empty, errorMessage);
+                }
+            }
+            return View(booking);
         }
     }
 }
