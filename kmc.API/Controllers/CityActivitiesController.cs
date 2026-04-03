@@ -2,7 +2,7 @@
 using kmc.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization; // <--- THIS WAS MISSING!
 
 namespace kmc.API.Controllers
 {
@@ -17,7 +17,7 @@ namespace kmc.API.Controllers
             _context = context;
         }
 
-        // GET: api/CityActivities (Open to everyone)
+        // GET: api/CityActivities (Gets all events or searches by Category)
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CityActivity>>> GetCityActivities([FromQuery] string category = null)
         {
@@ -30,7 +30,7 @@ namespace kmc.API.Controllers
             return await _context.CityActivities.ToListAsync();
         }
 
-        // GET: api/CityActivities/5 (Open to everyone)
+        // GET: api/CityActivities/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CityActivity>> GetCityActivity(int id)
         {
@@ -39,8 +39,8 @@ namespace kmc.API.Controllers
             return activity;
         }
 
-        // POST: api/CityActivities (LOCKED - Must be Organizer)
-        [Authorize(Roles = "Organizer")]
+        // POST: api/CityActivities (Create a new activity)
+        [Authorize(Roles = "Organizer")] // 🔒 LOCKED - ORGANIZER ONLY!
         [HttpPost]
         public async Task<ActionResult<CityActivity>> PostCityActivity(CityActivity cityActivity)
         {
@@ -49,8 +49,8 @@ namespace kmc.API.Controllers
             return CreatedAtAction(nameof(GetCityActivity), new { id = cityActivity.ActivityId }, cityActivity);
         }
 
-        // PUT: api/CityActivities/5 (LOCKED - Must be Organizer)
-        [Authorize(Roles = "Organizer")]
+        // PUT: api/CityActivities/5 (Update an activity)
+        [Authorize(Roles = "Organizer")] // 🔒 LOCKED - ORGANIZER ONLY!
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCityActivity(int id, CityActivity cityActivity)
         {
@@ -59,6 +59,7 @@ namespace kmc.API.Controllers
             var existingActivity = await _context.CityActivities.AsNoTracking().FirstOrDefaultAsync(a => a.ActivityId == id);
             if (existingActivity == null) return NotFound("Activity not found.");
 
+            // Assignment Requirement: Only the Organizer can update their event
             if (existingActivity.OrganizerId != cityActivity.OrganizerId)
             {
                 return Unauthorized("Only the creator can modify this activity.");
@@ -69,8 +70,8 @@ namespace kmc.API.Controllers
             return NoContent();
         }
 
-        // DELETE: api/CityActivities/5 (LOCKED - Must be Organizer)
-        [Authorize(Roles = "Organizer")]
+        // DELETE: api/CityActivities/5
+        [Authorize(Roles = "Organizer")] // 🔒 LOCKED - ORGANIZER ONLY!
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCityActivity(int id)
         {

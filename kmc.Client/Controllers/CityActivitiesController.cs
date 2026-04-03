@@ -158,5 +158,24 @@ namespace kmc.Client.Controllers
             }
             return View(booking);
         }
+        // GET: CityActivities/MyBookings
+        public async Task<IActionResult> MyBookings()
+        {
+            var client = CreateAuthenticatedClient(); // Attach the wristband!
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            // Call the new API endpoint we just made
+            var response = await client.GetAsync($"{baseUrl}/api/EventBookings/MyBookings");
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var bookings = JsonSerializer.Deserialize<List<EventBookingViewModel>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                return View(bookings);
+            }
+
+            // If it fails or they have no bookings, just show an empty list
+            return View(new List<EventBookingViewModel>());
+        }
     }
 }

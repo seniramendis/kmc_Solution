@@ -24,6 +24,13 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="CityActivities" asp-action="Index">City Activities</a>
                         </li>
+                        
+                        @if (Context.Request.Cookies["UserRole"] == "Resident")
+                        {
+                            <li class="nav-item ms-2">
+                                <a class="nav-link text-success fw-bold" asp-area="" asp-controller="CityActivities" asp-action="MyBookings">🎟️ My Tickets</a>
+                            </li>
+                        }
                     </ul>
                     
                     <ul class="navbar-nav">

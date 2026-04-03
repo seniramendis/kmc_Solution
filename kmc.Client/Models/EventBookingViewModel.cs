@@ -18,5 +18,8 @@ namespace kmc.Client.Models
         public string ContactEmail { get; set; }
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
+
+        // NEW: This allows the frontend to read the Activity Name and Date!
+        public CityActivityViewModel CityActivity { get; set; }
     }
 }

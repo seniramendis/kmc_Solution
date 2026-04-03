@@ -13,18 +13,26 @@ namespace kmc.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // 1. Connect Database
+            // 1. Connects the API to SQL Server
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            // 2. Add Identity (User & Role Management)
-            builder.Services.AddIdentity<IdentityUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
+            // 2. Add Identity (User & Role Management) WITH RELAXED PASSWORD RULES!
+            builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            {
+                // Turning off the annoying Microsoft password rules!
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 3; // Allows tiny passwords like "123"
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
 
             // 3. Add JWT Authentication (The VIP Wristbands)
             var jwtSettings = builder.Configuration.GetSection("Jwt");
-            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"]!);
+            var key = Encoding.ASCII.GetBytes(jwtSettings["Key"] ?? "ThisIsAMySuperSecretKeyForKMCAssignment2026!!!");
 
             builder.Services.AddAuthentication(options =>
             {
@@ -39,8 +47,8 @@ namespace kmc.API
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings["Issuer"],
-                    ValidAudience = jwtSettings["Audience"],
+                    ValidIssuer = jwtSettings["Issuer"] ?? "kmcAPI",
+                    ValidAudience = jwtSettings["Audience"] ?? "kmcClient",
                     IssuerSigningKey = new SymmetricSecurityKey(key)
                 };
             });

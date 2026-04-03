@@ -17,16 +17,13 @@ namespace kmc.API.Controllers
             _context = context;
         }
 
-        // POST: api/EventBookings (LOCKED - Must be a Resident to book)
+        // POST: api/EventBookings (LOCKED - Must be a Resident)
         [Authorize(Roles = "Resident")]
         [HttpPost]
         public async Task<ActionResult<EventBooking>> PostEventBooking(EventBooking booking)
         {
             var activity = await _context.CityActivities.FindAsync(booking.ActivityId);
-            if (activity == null)
-            {
-                return NotFound("Activity not found.");
-            }
+            if (activity == null) return NotFound("Activity not found.");
 
             var currentBookingsCount = await _context.EventBookings.CountAsync(b => b.ActivityId == booking.ActivityId);
             if (currentBookingsCount >= activity.MaxParticipants)
@@ -40,13 +37,21 @@ namespace kmc.API.Controllers
             return Ok(booking);
         }
 
-        // GET: api/EventBookings/Activity/5
-        [HttpGet("Activity/{activityId}")]
-        public async Task<ActionResult<IEnumerable<EventBooking>>> GetBookingsForActivity(int activityId)
+        // GET: api/EventBookings/MyBookings (LOCKED - Resident Only)
+        // 🌟 NEW: This method grabs the user's email from their Token and finds their tickets!
+        [Authorize(Roles = "Resident")]
+        [HttpGet("MyBookings")]
+        public async Task<ActionResult<IEnumerable<EventBooking>>> GetMyBookings()
         {
-            return await _context.EventBookings
-                .Where(b => b.ActivityId == activityId)
+            // Extract the logged-in user's email from their Token
+            var userEmail = User.Identity.Name;
+
+            var myBookings = await _context.EventBookings
+                .Include(b => b.CityActivity) // Automatically joins the Event data so we know the name of the activity!
+                .Where(b => b.ContactEmail == userEmail)
                 .ToListAsync();
+
+            return myBookings;
         }
     }
 }
