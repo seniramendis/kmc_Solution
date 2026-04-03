@@ -1,0 +1,49 @@
+﻿@model kmc.Client.Models.CityActivityViewModel
+
+@{
+    ViewData["Title"] = "Edit Activity";
+}
+
+<div class="container mt-4">
+    <h2>Edit City Activity</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Edit">
+                <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                
+                <input type="hidden" asp-for="ActivityId" />
+
+                <div class="mb-3">
+                    <label asp-for="ActivityName" class="form-label">Activity Name</label>
+                    <input asp-for="ActivityName" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Category" class="form-label">Category</label>
+                    <input asp-for="Category" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ScheduledDate" class="form-label">Date & Time</label>
+                    <input asp-for="ScheduledDate" class="form-control" type="datetime-local" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Venue" class="form-label">Venue / Location</label>
+                    <input asp-for="Venue" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="MaxParticipants" class="form-label">Max Participants</label>
+                    <input asp-for="MaxParticipants" class="form-control" type="number" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="OrganizerId" class="form-label">Organizer ID</label>
+                    <input asp-for="OrganizerId" class="form-control" readonly />
+                    <small class="text-muted">Only the original organizer can save changes.</small>
+                </div>
+                
+                <button type="submit" class="btn btn-warning">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>

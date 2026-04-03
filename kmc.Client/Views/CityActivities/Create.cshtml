@@ -1,0 +1,44 @@
+﻿@model kmc.Client.Models.CityActivityViewModel
+
+@{
+    ViewData["Title"] = "Create Activity";
+}
+
+<div class="container mt-4">
+    <h2>Create New City Activity</h2>
+    <hr />
+
+    <div class="row">
+        <div class="col-md-6">
+            <form asp-action="Create">
+                <div class="mb-3">
+                    <label asp-for="ActivityName" class="form-label">Activity Name</label>
+                    <input asp-for="ActivityName" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Category" class="form-label">Category</label>
+                    <input asp-for="Category" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ScheduledDate" class="form-label">Date & Time</label>
+                    <input asp-for="ScheduledDate" class="form-control" type="datetime-local" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Venue" class="form-label">Venue / Location</label>
+                    <input asp-for="Venue" class="form-control" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="MaxParticipants" class="form-label">Max Participants</label>
+                    <input asp-for="MaxParticipants" class="form-control" type="number" required />
+                </div>
+                <div class="mb-3">
+                    <label asp-for="OrganizerId" class="form-label">Organizer ID (Your Username/ID)</label>
+                    <input asp-for="OrganizerId" class="form-control" required />
+                </div>
+                
+                <button type="submit" class="btn btn-success">Create Activity</button>
+                <a asp-action="Index" class="btn btn-secondary ms-2">Back to List</a>
+            </form>
+        </div>
+    </div>
+</div>
