@@ -19,7 +19,7 @@ namespace kmc.Client.Models
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
 
-        // 🌟 THE FIX: Added a '?' to make this nullable so the form doesn't block you!
+        
         public CityActivityViewModel? CityActivity { get; set; }
     }
 }

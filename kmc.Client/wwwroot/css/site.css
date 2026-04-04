@@ -1,4 +1,4 @@
-﻿/* 🌟 KANDYAN CULTURAL COLOR PALETTE 🌟 */
+﻿
 :root {
     --kandy-gold: #F39C12;
     --kandy-gold-hover: #D68910;
@@ -7,7 +7,7 @@
     --kandy-dark-teal: #0E6251;
 }
 
-/* 🌟 Stops the edge-to-edge image from causing horizontal scrolling! */
+
 html, body {
     overflow-x: hidden;
 }
@@ -26,13 +26,13 @@ body {
     background-color: #f8f9fa;
 }
 
-/* 🌟 FIX: Force input text and hints (placeholders) to be perfectly visible */
+
 .form-control, .form-select {
-    color: #212529 !important; /* Forces typed text to be dark */
+    color: #212529 !important; 
 }
 
     .form-control::placeholder {
-        color: #6c757d !important; /* Forces the hint text to be dark gray */
+        color: #6c757d !important; 
         opacity: 0.8 !important;
     }
 
@@ -43,7 +43,7 @@ body {
         box-shadow: 0 0 0 0.25rem rgba(30, 132, 73, 0.25) !important;
     }
 
-/* 🌟 EDGE-TO-EDGE FULL SCREEN HERO 🌟 */
+
 .hero-wrapper {
     width: 100vw;
     position: relative;
@@ -65,7 +65,7 @@ body {
     box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-/* 🌟 CUSTOM CULTURAL BUTTONS 🌟 */
+
 .btn-gold {
     background-color: var(--kandy-gold);
     color: #fff;
@@ -93,7 +93,7 @@ body {
         transform: translateY(-2px);
     }
 
-/* Smooth Card Animations */
+
 .hover-card {
     transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     overflow: hidden;

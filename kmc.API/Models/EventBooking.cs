@@ -20,7 +20,7 @@ namespace kmc.API.Models
 
         public DateTime BookingDate { get; set; } = DateTime.UtcNow;
 
-        // 🌟 THE FIX: Added a '?' here too!
+        
         [ForeignKey("ActivityId")]
         public CityActivity? CityActivity { get; set; }
     }

@@ -15,10 +15,10 @@ namespace kmc.API.Data
         public DbSet<CityActivity> CityActivities { get; set; }
         public DbSet<EventBooking> EventBookings { get; set; }
 
-        // 🌟 THE MISSING PIECE! This tells Identity to build its security tables correctly.
+        
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            base.OnModelCreating(builder); // Do not remove this line!
+            base.OnModelCreating(builder); 
         }
     }
 }

@@ -183,7 +183,6 @@ namespace kmc.Client.Controllers
             return View(new List<EventBookingViewModel>());
         }
 
-        // 🌟 NEW: GET: CityActivities/Dashboard (Organizer Analytics)
         public async Task<IActionResult> Dashboard()
         {
             var client = CreateAuthenticatedClient();
@@ -196,10 +195,31 @@ namespace kmc.Client.Controllers
                 var jsonString = await response.Content.ReadAsStringAsync();
                 var activities = JsonSerializer.Deserialize<List<CityActivityViewModel>>(jsonString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
-                // Send the data to our new Dashboard view!
                 return View(activities);
             }
             return View(new List<CityActivityViewModel>());
+        }
+
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CancelBooking(int bookingId)
+        {
+            var client = CreateAuthenticatedClient();
+            var baseUrl = _configuration["ApiSettings:BaseUrl"];
+
+            var response = await client.DeleteAsync($"{baseUrl}/api/EventBookings/{bookingId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Your ticket has been successfully cancelled.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Failed to cancel the ticket. It may have already been removed.";
+            }
+
+            return RedirectToAction(nameof(MyBookings));
         }
     }
 }

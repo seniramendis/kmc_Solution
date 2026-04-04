@@ -24,7 +24,7 @@ namespace kmc.API.Controllers
             _configuration = configuration;
         }
 
-        // POST: api/auth/register
+        
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
@@ -33,7 +33,7 @@ namespace kmc.API.Controllers
 
             if (result.Succeeded)
             {
-                // Create the Role if it doesn't exist, then assign it to the user
+                
                 if (!await _roleManager.RoleExistsAsync(model.Role))
                 {
                     await _roleManager.CreateAsync(new IdentityRole(model.Role));
@@ -46,7 +46,7 @@ namespace kmc.API.Controllers
             return BadRequest(result.Errors);
         }
 
-        // POST: api/auth/login
+       
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginModel model)
         {
@@ -60,7 +60,7 @@ namespace kmc.API.Controllers
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                // Get the user's role and add it to their VIP Wristband (Token)
+                
                 var userRoles = await _userManager.GetRolesAsync(user);
                 foreach (var role in userRoles)
                 {

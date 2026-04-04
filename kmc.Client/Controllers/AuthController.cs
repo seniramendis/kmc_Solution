@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Net.Http.Json; // <-- THIS WAS THE MISSING PIECE!
+using System.Net.Http.Json; 
 
 namespace kmc.Client.Controllers
 {
@@ -60,7 +60,7 @@ namespace kmc.Client.Controllers
 
                 Response.Cookies.Append("JWToken", token, new CookieOptions { HttpOnly = true, Secure = true });
 
-                // Read the role from the token and save it to the website so we can hide/show buttons
+                
                 var handler = new JwtSecurityTokenHandler();
                 var jwtToken = handler.ReadJwtToken(token);
                 var role = jwtToken.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role || c.Type == "role")?.Value;

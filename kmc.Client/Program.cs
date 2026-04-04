@@ -6,15 +6,15 @@ namespace kmc.Client
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            
             builder.Services.AddControllersWithViews();
 
-            // REQUIRED: Allow the client to make HTTP calls to the API
+            
             builder.Services.AddHttpClient();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");

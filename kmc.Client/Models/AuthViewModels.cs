@@ -15,7 +15,7 @@ namespace kmc.Client.Models
         public string ConfirmPassword { get; set; }
 
         [Required]
-        public string Role { get; set; } // Identifies Organizer vs Resident
+        public string Role { get; set; } 
     }
 
     public class LoginViewModel
